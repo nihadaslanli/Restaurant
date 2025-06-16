@@ -1,4 +1,5 @@
 
+using AdminPanelPractice.Areas.Admin.Data;
 using Mailing;
 using Mailing.MailKitImplementations;
 using Microsoft.AspNetCore.Identity;
@@ -36,11 +37,23 @@ namespace Restaurant
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
             });
+
             builder.Services.AddScoped<DataInitializer>();
 
             builder.Services.AddTransient<IMailService, MailKitMailService>();
             builder.Services.Configure<SuperAdmin>(builder.Configuration.GetSection("SuperAdmin"));
+            builder.Services.AddAuthentication("Cookies")
+    .AddCookie("Cookies", options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
+    });
+            FilePathConstants.MenuItemPath = Path.Combine(builder.Environment.WebRootPath, "images", "menuItem");
+
+
+            builder.Services.AddAuthorization();
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -52,6 +65,7 @@ namespace Restaurant
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseWebSockets();
 
             app.UseRouting();
 
