@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Restourant.Models
+namespace Restaurant.Models
 {
     public class ChangePasswordViewModel
     {
